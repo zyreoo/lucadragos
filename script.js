@@ -100,7 +100,8 @@ async function uploadMedia(file, caption) {
   }
 
   const mediaType = file.type.startsWith("video/") ? "video" : "photo";
-  const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
+  const resourceType = mediaType === "video" ? "video" : "image";
+  const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
