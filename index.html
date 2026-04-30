@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ionut Moldovan - Photo & Video Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Gallery</p>
+          <h1>Happy Birthday, Ionut Moldovan</h1>
+          <p class="subtitle">Upload and view photos and videos in one clean place.</p>
+        </div>
+        <button id="openUploadBtn" class="primary-btn" type="button">Add Photo or Video</button>
+      </header>
+
+      <section class="gallery-card">
+        <div class="gallery-head">
+          <h2>Memories</h2>
+          <span id="statusText">No uploads yet.</span>
+        </div>
+        <div id="galleryGrid" class="gallery-grid"></div>
+      </section>
+    </main>
+
+    <dialog id="uploadDialog">
+      <form id="uploadForm" method="dialog" class="upload-form">
+        <h3>Add media</h3>
+        <p class="dialog-subtitle">Choose a photo or video and add an optional caption.</p>
+        <label>
+          Select file
+          <input id="fileInput" type="file" accept="image/*,video/*" required />
+        </label>
+        <label>
+          Caption (optional)
+          <input id="captionInput" type="text" maxlength="120" placeholder="Add a short caption..." />
+        </label>
+        <div class="dialog-actions">
+          <button type="button" id="cancelUploadBtn" class="ghost-btn">Cancel</button>
+          <button type="submit" class="primary-btn">Upload</button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="mediaCardTemplate">
+      <article class="media-card">
+        <div class="media-frame"></div>
+        <div class="media-meta">
+          <p class="media-caption"></p>
+          <span class="media-kind"></span>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
