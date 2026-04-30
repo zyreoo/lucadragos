@@ -1,6 +1,6 @@
 const MEDIA_KEY = "birthdayGallery.mediaItems";
-const CLOUDINARY_CLOUD_NAME = "dizwqfgrr";
-const CLOUDINARY_UPLOAD_PRESET = "vUgAvgBP8nEotnB138YhE1FgICQ";
+const CLOUDINARY_CLOUD_NAME = window.APP_CONFIG?.cloudinaryCloudName || "";
+const CLOUDINARY_UPLOAD_PRESET = window.APP_CONFIG?.cloudinaryUploadPreset || "";
 
 const openUploadBtn = document.getElementById("openUploadBtn");
 const uploadDialog = document.getElementById("uploadDialog");
@@ -17,6 +17,10 @@ function setStatus(message) {
 }
 
 function openDialog() {
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+    setStatus("Upload is not configured. Set Cloudinary values in app-config.js.");
+    return;
+  }
   uploadDialog.showModal();
 }
 
@@ -90,6 +94,11 @@ function renderMedia() {
 }
 
 async function uploadMedia(file, caption) {
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+    setStatus("Upload is not configured. Set Cloudinary values in app-config.js.");
+    return;
+  }
+
   const mediaType = file.type.startsWith("video/") ? "video" : "photo";
   const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`;
   const formData = new FormData();
@@ -110,8 +119,19 @@ async function uploadMedia(file, caption) {
   }
 
   if (!response.ok) {
-    const errorText = await response.text();
-    setStatus(`Upload failed: ${errorText.slice(0, 80)}...`);
+    let errorMessage = "Cloudinary rejected the upload.";
+    try {
+      const errorPayload = await response.json();
+      if (errorPayload?.error?.message) {
+        errorMessage = errorPayload.error.message;
+      }
+    } catch {
+      const errorText = await response.text();
+      if (errorText) {
+        errorMessage = errorText.slice(0, 120);
+      }
+    }
+    setStatus(`Upload failed: ${errorMessage}`);
     openUploadBtn.disabled = false;
     return;
   }
@@ -150,5 +170,9 @@ uploadForm.addEventListener("submit", async (event) => {
   captionInput.value = "";
 });
 
-setStatus("Ready to upload.");
+if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+  setStatus("Set Cloudinary values in app-config.js.");
+} else {
+  setStatus("Ready to upload.");
+}
 renderMedia();
