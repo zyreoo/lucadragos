@@ -104,7 +104,6 @@ async function uploadMedia(file, caption) {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-  formData.append("folder", "birthday-ionut");
 
   setStatus("Uploading to Cloudinary...");
   openUploadBtn.disabled = true;
